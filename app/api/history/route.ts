@@ -15,22 +15,68 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import { getSessionCookieData } from "utils/AuthUtils";
+import { cookies, headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+import { getAlreadyValidatedSessionCookieData } from "utils/AuthUtils";
+import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
 export const dynamic = "force-dynamic";
 
-export async function GET()
+export type TranslationHistory = {
+    "element-uid": string;
+    "element-name": string;
+    "target-language": string;
+    "time-updated": number;
+    "time-requested": number;
+    "time-intranslation": number;
+    "time-imported": number;
+}
+
+export async function GET(request: NextRequest)
 {
+    const space = request.nextUrl.searchParams.get("space") ?? "";
+    const entry = request.nextUrl.searchParams.get("entry") ?? "";
+
+    if (space === "" || entry === "")
+    {
+        return NextResponse.json({ message: "Bad input" }, {
+            status: 500
+        });
+    }
+    
     const cookieStore = await cookies();
-    const data = await getSessionCookieData(cookieStore);
-    if (data === null)
+    const data = await getAlreadyValidatedSessionCookieData(cookieStore);
+    if (data === null || !data.token)
     {
         return NextResponse.json({ message: "Access impossible" }, {
             status: 401
         });
     }
 
-    return NextResponse.json([]);
+    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/element?=space=" + space + "&entry=" + entry, {
+		method: "GET",
+        cache: "no-cache",
+		headers:{
+			'Content-Type': 'application/json',
+            'Authorization': data.token
+		}
+	});
+
+    if (res.ok)
+    {
+        const js = await res.json();
+        if (js && Array.isArray(js))
+            return NextResponse.json(js);
+        else
+            return NextResponse.json([]);
+    }
+
+    const response = NextResponse.json({ message: "Could not fetch data" }, {
+        status: res.status
+    });
+    if (response.cookies.has("tssession"))
+        response.cookies.delete("tssession");
+
+    return response;
+
 }
