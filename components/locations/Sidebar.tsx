@@ -78,7 +78,7 @@ const PrintTable = function(props: { list:TranslationHistory[], field:string, ti
 	if (props.list.length === 0)
 		return <></>;
 
-	return <table style={{ paddingBottom: "1em"}}>
+	return <table style={{ paddingBottom: "1em", width: "100%"}}>
 		<thead>
 			<tr>
 				<th colSpan={2}>{props.title}</th>
@@ -86,7 +86,7 @@ const PrintTable = function(props: { list:TranslationHistory[], field:string, ti
   		</thead>
 		<tbody>
 			{props.list.map((e:any, i) => <tr key={props.key+i}>
-				<td>{e["target-language"]}</td>
+				<td style={{ paddingRight: "1em"}}>{e["target-language"]}</td>
 				<td>{new Date(e[props.field]).toLocaleString()}</td>
 			</tr>)}
 		</tbody>
