@@ -71,12 +71,13 @@ export async function GET(request: NextRequest)
             return NextResponse.json([]);
     }
 
-    const response = NextResponse.json({ message: "Could not fetch history" }, {
+    const err = await res.json();
+    const response = NextResponse.json({ message: "Could not fetch history: " + (err.message ?? "no reason given") }, {
         status: res.status
     });
+
     if (response.cookies.has("tssession"))
         response.cookies.delete("tssession");
 
     return response;
-
 }
