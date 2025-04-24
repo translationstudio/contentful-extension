@@ -36,8 +36,8 @@ export async function GET(request: NextRequest)
 {
     const space = request.nextUrl.searchParams.get("space") ?? "";
     const entry = request.nextUrl.searchParams.get("entry") ?? "";
-
-    if (space === "" || entry === "")
+    const env = request.nextUrl.searchParams.get("env") ?? "";
+    if (space === "" || entry === "" || env === "")
     {
         return NextResponse.json({ message: "Bad input" }, {
             status: 500
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest)
         });
     }
 
-    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/element?=space=" + space + "&entry=" + entry, {
+    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/element?=space=" + space + "&entry=" + entry + "&env=" + env, {
 		method: "GET",
         cache: "no-cache",
 		headers:{

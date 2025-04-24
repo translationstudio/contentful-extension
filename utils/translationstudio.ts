@@ -50,9 +50,9 @@ export const validateLicense = (key: string): Promise<Response> => {
 };
 
 
-export function getHistoryForElement({ space, entry }: { space: string; entry: string; })
+export function getHistoryForElement({ space, entry, env }: { space: string; entry: string; env: string; })
 {
-	return fetch(`/api/history?space=${space}&entry=${entry}`, {
+	return fetch(`/api/history?space=${space}&entry=${entry}&env=${env}`, {
 		cache: "no-cache",
 		headers:{
 			'X-translationstudio': 'translationstudio'

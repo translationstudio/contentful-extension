@@ -38,9 +38,9 @@ import { LOGO } from "utils/logo";
 import Image from "next/image";
 import { TranslationHistory } from "app/api/history/route";
 
-const getEntryHistory = async (space: string, entry: string) => {
+const getEntryHistory = async (space: string, entry: string, env:string) => {
 	try {
-		const response = await getHistoryForElement({ space, entry });
+		const response = await getHistoryForElement({ space, entry, env });
 		if (response.status === 200) 
 		{
 			const data:TranslationHistory[] = await response.json();
@@ -171,7 +171,7 @@ const Sidebar = () => {
 				}
 			}
 			
-			return getEntryHistory(space, entry);
+			return getEntryHistory(space, entry, sdk.ids.environment);
 		})
 		.then((hdata) => setHistory(hdata))
 		.catch((err:any) => {
