@@ -71,7 +71,7 @@ export async function GET(request: NextRequest)
             return NextResponse.json([]);
     }
 
-    const response = NextResponse.json({ message: "Could not fetch data" }, {
+    const response = NextResponse.json({ message: "Could not fetch history" }, {
         status: res.status
     });
     if (response.cookies.has("tssession"))
