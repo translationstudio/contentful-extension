@@ -37,6 +37,7 @@ import DateInput from "../../components/DateInput";
 import { LOGO } from "utils/logo";
 import Image from "next/image";
 import { TranslationHistory } from "app/api/history/route";
+import { listenerCount } from "process";
 
 const getEntryHistory = async (space: string, entry: string, env:string) => {
 	try {
@@ -72,6 +73,26 @@ const getLanguageMapping = async () => {
 	return [];
 };
 
+const PrintTable = function(props: { list:TranslationHistory[], field:string, title:string, key:string })
+{
+	if (props.list.length === 0)
+		return <></>;
+
+	return <table style={{ paddingBottom: "1em"}}>
+		<thead>
+			<tr>
+				<th colSpan={2}>{props.title}</th>
+			</tr>
+  		</thead>
+		<tbody>
+			{props.list.map((e:any, i) => <tr key={props.key+i}>
+				<td>{e["target-language"]}</td>
+				<td>{new Date(e[props.field]).toLocaleString()}</td>
+			</tr>)}
+		</tbody>
+	</table>
+}
+
 const ShowHistory = function(props:{ history:TranslationHistory[]})
 {
 	const imported:TranslationHistory[] = [];
@@ -100,30 +121,9 @@ const ShowHistory = function(props:{ history:TranslationHistory[]})
 	
 	return <Box>
 		<Paragraph>Translation History</Paragraph>
-		{imported.length > 0 && (<>
-			<Caption>Translated into</Caption>
-			<ul>
-				{imported.map((e, i) => <li key={"imp"+i}>
-					{e["target-language"]} {new Date(e["time-imported"]).toLocaleString()}
-				</li>)}
-			</ul>
-		</>)}
-		{intranslation.length > 0 && (<>
-			<Caption>In translation</Caption>
-			<ul>
-				{intranslation.map((e, i) => <li key={"imp"+i}>
-					{e["target-language"]} {new Date(e["time-intranslation"]).toLocaleString()}
-				</li>)}
-			</ul>
-		</>)}
-		{waiting.length > 0 && (<>
-			<Caption>Queued/Not yet translated</Caption>
-			<ul>
-				{waiting.map((e, i) => <li key={"imp"+i}>
-					{e["target-language"]} {new Date(e["time-requested"]).toLocaleString()}
-				</li>)}
-			</ul>
-		</>)}
+		<PrintTable key="imp" title="Translated and imported" field="time-imported" list={imported} />
+		<PrintTable key="int" title="In translation" field="time-intranslation" list={intranslation} />
+		<PrintTable key="wait" title="Queued/Not yet translated" field="time-requested" list={waiting} />
 	</Box>
 }
 
