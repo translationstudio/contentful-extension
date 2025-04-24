@@ -53,7 +53,7 @@ export async function GET(request: NextRequest)
         });
     }
 
-    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/element?space=" + space + "&entry=" + entry + "&env=" + env, {
+    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/history/element?space=" + encodeURIComponent(space) + "&entry=" + encodeURIComponent(entry) + "&env=" + encodeURIComponent(env), {
 		method: "GET",
         cache: "no-cache",
 		headers:{
