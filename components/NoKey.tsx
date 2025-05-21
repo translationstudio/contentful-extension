@@ -27,7 +27,9 @@ export function IsLoading()
         <div style={{ textAlign: "center"}}>
             <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
-        <Paragraph>translationstudio is loading</Paragraph>;
+        <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+            <Paragraph>translationstudio is loading</Paragraph>;
+        </div>
     </>    
 }
 
@@ -38,6 +40,8 @@ export default function noKey()
         <div style={{ textAlign: "center"}}>
             <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
-        <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
+        <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+            <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
+        </div>
     </>
 }

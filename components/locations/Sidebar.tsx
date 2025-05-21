@@ -309,8 +309,10 @@ const Sidebar = () => {
 			<div style={{ textAlign: "right"}}>
 				<Image height={50} width={116} src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
 			</div>
-			<Paragraph>You do not yet have any translation settings configured.</Paragraph>
-			<Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio needs to be configured.</a></Paragraph>
+			<div style={{ paddingTop: "1.5em", textAlign: "center"}}>
+				<Paragraph>You do not yet have any translation settings configured.</Paragraph>
+				<Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio needs to be configured.</a></Paragraph>
+			</div>
 		</>;
 	}
 
