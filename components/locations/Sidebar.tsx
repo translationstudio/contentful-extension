@@ -19,7 +19,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 
 // Components
-import { Box, Button, Caption, Checkbox, Paragraph, Radio } from "@contentful/f36-components";
+import { Box, Button, Caption, Checkbox, IconButton, Menu, Paragraph, Radio } from "@contentful/f36-components";
+import { MenuIcon } from '@contentful/f36-icons';
 import NoKey from "../../components/NoKey";
 
 // Utils
@@ -112,6 +113,7 @@ const ShowHistory = function(props:{ history:TranslationHistory[]})
 	{
 		return <Box marginTop="spacingM">
 			<Caption>This entry has not been translated, yet.</Caption>
+			<Paragraph>Please note: you plan might not include translation histories.</Paragraph>
 		</Box>
 	}
 
@@ -126,6 +128,9 @@ const ShowHistory = function(props:{ history:TranslationHistory[]})
 		<PrintTable key="wait" title="Queued/Not yet translated" field="time-requested" list={waiting} />
 	</Box>
 }
+
+const VIEW_TRANSLATION = 1;
+const VIEW_HISTORY = 2;
 
 // Component
 const Sidebar = () => {
@@ -143,6 +148,7 @@ const Sidebar = () => {
 	const [machineTranslation, setMachineTranslation] = useState(false);
 	const [sendEmail, setSendEmail] = useState(true);
 	const [pending, setPending] = useState(false);
+	const [viewType, setViewType] = useState(VIEW_TRANSLATION)
 
 	const entry = sdk.ids.entry;
 	const space = sdk.ids.space;
@@ -277,39 +283,62 @@ const Sidebar = () => {
 	{
 		return <>
 			<div style={{ textAlign: "right"}}>
-				<Image src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
+				<Image height={50} width={116} src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
 			</div>
 			<Paragraph>You do not yet have any translation settings configured.</Paragraph>
 			<Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio needs to be configured.</a></Paragraph>
 		</>;
 	}
 
+	const TranslationSettings = function()
+	{
+		return <>
+			<Paragraph>Translation Settings</Paragraph>
+				<Box marginBottom="spacingM">
+					{languageMapping.map((item, idx) => (
+						<Radio onChange={() => onSelectLanguageMapping(idx)} name="mappings" isChecked={idx === selectedTranslation} value={idx.toString()} key={idx} defaultChecked={idx === 0}>
+							{item["name"]}
+						</Radio>
+					))}
+				</Box>
+				{!machineTranslation && (<>
+					<Paragraph>Translation date</Paragraph>
+					<DateInput onChange={setDate} value={dueDate} />
+					<Checkbox name="urgent" isChecked={urgent} onChange={handleCheckbox}>
+						Translate immediately and do not use quotes
+					</Checkbox>
+					<Checkbox name="email" isChecked={sendEmail} onChange={handleCheckboxMail}>
+						Notify me by mail about the translation status
+					</Checkbox>
+				</>)}
+				<Box style={{textAlign: "center", paddingBottom: "2em"}}>
+					<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={getButtonTitle(machineTranslation, urgent)}>
+						{getButtonTitle(machineTranslation, urgent)}
+					</Button>
+				</Box>
+			</>
+	}
+
+	const TranslationMenu = function() 
+	{
+		return <div style={{ position: "fixed", right: "10px", top: "0", zIndex: 2 }}>
+				<Menu>
+					<Menu.Trigger>
+						<IconButton variant="secondary" icon={<MenuIcon />} aria-label="toggle menu" />
+					</Menu.Trigger>
+					<Menu.List>
+						<Menu.Item onClick={() => setViewType(VIEW_TRANSLATION)}>Translate entry</Menu.Item>
+						<Menu.Item disabled={history.length === 0} onClick={() => setViewType(VIEW_HISTORY)}>Translation history</Menu.Item>
+					</Menu.List>
+				</Menu>
+			</div>
+	}
+
 	return (
 		<>
-			<Paragraph>Translation Settings</Paragraph>
-			<Box marginBottom="spacingM">
-				{languageMapping.map((item, idx) => (
-					<Radio onChange={() => onSelectLanguageMapping(idx)} name="mappings" value={idx.toString()} key={idx} defaultChecked={idx === 0}>
-						{item["name"]}
-					</Radio>
-				))}
-			</Box>
-			{!machineTranslation && (<>
-				<Paragraph>Translation date</Paragraph>
-				<DateInput onChange={setDate} value={dueDate} />
-				<Checkbox name="urgent" isChecked={urgent} onChange={handleCheckbox}>
-					Translate immediately and do not use quotes
-				</Checkbox>
-				<Checkbox name="email" isChecked={sendEmail} onChange={handleCheckboxMail}>
-					Notify me by mail about the translation status
-				</Checkbox>
-			</>)}
-			<Box style={{textAlign: "center", paddingBottom: "2em"}}>
-				<Button variant="positive" style={{ width: "100%" }} isDisabled={pending} onClick={() => translate()} title={getButtonTitle(machineTranslation, urgent)}>
-					{getButtonTitle(machineTranslation, urgent)}
-				</Button>
-			</Box>
-			<ShowHistory history={history} />
+			<TranslationMenu />
+			{viewType === VIEW_TRANSLATION && <TranslationSettings />}
+			{viewType === VIEW_HISTORY && <ShowHistory history={history} /> }
 		</>
 	);
 };
