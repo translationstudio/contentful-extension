@@ -38,6 +38,7 @@ import DateInput from "../../components/DateInput";
 import { LOGO } from "utils/logo";
 import Image from "next/image";
 import { TranslationHistory } from "app/api/history/route";
+import { ConnectorMap, SelectedConnector } from "../Types";
 
 const getEntryHistory = async (space: string, entry: string, env:string) => {
 	try {
@@ -131,15 +132,6 @@ const ShowHistory = function(props:{ history:TranslationHistory[]})
 const VIEW_TRANSLATION = 1;
 const VIEW_HISTORY = 2;
 
-type ConnectorMap = {
-	[id:string]:LanguageMapping
-}
-
-type SelectedConnector = {
-	id: string;
-	machineTranslation: boolean;
-	urgent: boolean;
-}
 
 // Component
 const Sidebar = () => {
