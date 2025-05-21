@@ -26,7 +26,7 @@ export default function noKey()
 
     return <>
         <div style={{ textAlign: "center"}}>
-            <Image src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+            <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
         </div>
         <Paragraph>Please go to the App configuration and enter a valid translationstudio license</Paragraph>;
     </>
