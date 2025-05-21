@@ -41,7 +41,7 @@ export function NoLanguageMappings()
             </div>
             <div style={{ paddingTop: "1.5em", textAlign: "center"}}>
                 <Paragraph>You do not yet have any translation settings configured.</Paragraph>
-                <Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">Please access your translationstudio account.</a></Paragraph>
+                <Paragraph>Please access your <a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio account</a>.</Paragraph>
             </div>
         </>;
 }
