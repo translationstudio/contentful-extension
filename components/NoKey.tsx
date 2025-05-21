@@ -21,6 +21,16 @@ import { LOGO } from "utils/logo";
 import { css } from "emotion";
 import Image from "next/image";
 
+export function IsLoading()
+{
+    return <>
+        <div style={{ textAlign: "center"}}>
+            <Image height={50} width={116} src={LOGO} alt="" className={css({ height: "100px", width: "227px", display: "inline-block" })} />
+        </div>
+        <Paragraph>translationstudio is loading</Paragraph>;
+    </>    
+}
+
 export default function noKey()
 {
 
