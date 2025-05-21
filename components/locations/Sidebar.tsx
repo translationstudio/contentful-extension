@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 // Components
 import { Box, Button, Caption, Checkbox, IconButton, Menu, Paragraph, Radio } from "@contentful/f36-components";
 import { MenuIcon } from '@contentful/f36-icons';
-import NoKey, { IsLoading } from "../../components/NoKey";
+import NoKey, { IsLoading, NoLanguageMappings } from "../../components/NoKey";
 
 // Utils
 import { getHistoryForElement, getLanguages, postAuthenticate, postTranslation } from "../../utils/translationstudio";
@@ -143,7 +143,6 @@ type SelectedConnector = {
 
 // Component
 const Sidebar = () => {
-	const today = new Date();
 
 	// Contentfull SDK
 	const sdk = useSDK<SidebarAppSDK>();
@@ -164,7 +163,7 @@ const Sidebar = () => {
 	const email = sdk.user.email;
 	const titleField = sdk.contentType.displayField;
 	const title = sdk.entry.fields[titleField]?.getValue() ?? entry;
-	const key = sdk.parameters.installation.translationStudioKey;
+	const key = sdk.parameters.installation.translationStudioKey ?? "";
 	
 	
 	useEffect(() => {
@@ -201,12 +200,7 @@ const Sidebar = () => {
 		
 	}, [entry, key, space, sdk, setLanguageMappings, setHistory, setSelectedTranslation, setIsReady]);
 
-	// Show error if no TS key is available
-	if (!isReady)
-		return <IsLoading />
-	else if (!key) 
-		return <NoKey />;
-
+	
 	const setDate = (event: { target: { value: React.SetStateAction<string> } }) => {
 		setDueDate(event.target.value);
 	};
@@ -303,21 +297,11 @@ const Sidebar = () => {
 		});
 	}
 
-	if (languageMapping === null)
-	{
-		return <>
-			<div style={{ textAlign: "right"}}>
-				<Image height={50} width={116} src={LOGO} alt="" style={{ height: "50px", display: "inline-block" }} />
-			</div>
-			<div style={{ paddingTop: "1.5em", textAlign: "center"}}>
-				<Paragraph>You do not yet have any translation settings configured.</Paragraph>
-				<Paragraph><a rel="nofollow" href="https://account.translationstudio.tech" target="_blank">translationstudio needs to be configured.</a></Paragraph>
-			</div>
-		</>;
-	}
-
 	const TranslationSettings = function()
 	{
+		if (languageMapping === null)
+			return <></>;
+		
 		return <>
 			<Paragraph>Translation Settings</Paragraph>
 				<Box marginBottom="spacingM">
@@ -359,6 +343,13 @@ const Sidebar = () => {
 				</Menu>
 			</div>
 	}
+
+	if (!isReady)
+		return <IsLoading />
+	else if (!key) 
+		return <NoKey />;
+	else if (languageMapping === null)
+		return <NoLanguageMappings />
 
 	return (
 		<>
