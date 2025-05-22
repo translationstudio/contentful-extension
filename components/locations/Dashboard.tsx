@@ -24,9 +24,75 @@ import { validateLicense } from "../../utils/translationstudio";
 import { LOGO } from "../../utils/logo";
 import Image from "next/image";
 
-export interface AppInstallationParameters {
-	translationStudioKey?: string;
-	fieldExceptions?: string;
+type ContentType = {
+	displayField: string;
+	uid: string;
+	name: string;
+}
+
+type AvailableContentTypes = {
+	[id:string] : ContentType
+}
+
+interface ContentTypeResult {
+	displayField: string;
+	name: string;
+	sys: {
+		id: string
+	}
+}
+
+
+type ResultList<T> = {
+	total: number;
+	limit: number;
+	items: T[]
+}
+
+
+async function getEntriesByContentType(sdk:PageAppSDK, type: string)
+{
+
+}
+
+
+async function getAllContentTypes(sdk:PageAppSDK)
+{
+	const result:AvailableContentTypes = { }
+	const limit = 1000;
+	let skip = 0;
+	let hasMore = true;
+
+	do 
+	{
+		const list:ResultList<ContentTypeResult> = await sdk.cma.contentType.getMany({ query: { limit: limit, skip: skip } });
+		if (list.total > 0 && list.items.length > 0)
+		{
+			list.items.forEach(e => { 
+				const name = e.name;
+				const uid = e.sys.id;
+				const field = e.displayField;
+
+				if (name && uid && field)
+				{
+					result[uid] = {
+						displayField: field,
+						uid: uid,
+						name: name
+					}
+				}
+			});
+
+			if (list.total < limit)
+				hasMore = false;
+		}
+		else 
+			hasMore = false;
+
+	} 
+	while (hasMore);
+	
+	return result;
 }
 
 export default function Dashboard()
@@ -50,6 +116,8 @@ export default function Dashboard()
     {
         const space = await sdk.cma.space.get({  });
         const list = await sdk.cma.entry.getMany({});
+		const contentTypes = await getAllContentTypes(sdk);
+		console.log(contentTypes)
     }
 
     useEffect( () =>{ InitSpace() }, [] );
@@ -133,5 +201,10 @@ export default function Dashboard()
 	);
     */
 
-    return <>test</>
+    return <Flex flexDirection="column" className={css({ margin: "5em" })}>
+			<div className={css({ textAlign: "right", marginBottom: "2em" })}>
+				<Image width="227" height="100" src={LOGO} alt="" className={css({ display: "inline-block" })} />
+			</div>
+			<Caption>Dashboard</Caption>
+		</Flex>
 };
