@@ -20,7 +20,7 @@ import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration
 
 export async function ApiLanguageMappings(key:string, space:string)
 {
-    const res = await fetch(TranslationstudioConfiguration.URL + "/mappings", {
+    const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/mappings", {
 		method: "POST",
         cache: "no-cache",
 		headers:{

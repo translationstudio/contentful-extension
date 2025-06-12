@@ -22,7 +22,7 @@ export async function ApiValidate(license: string)
     if (!license)
         throw new Error("License missing");
 
-    const respose = await fetch(TranslationstudioConfiguration.URL + "/validate", {
+    const respose = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/validate", {
         method: "POST",
         cache: "no-cache",
         headers:{

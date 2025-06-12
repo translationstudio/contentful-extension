@@ -15,17 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-const URL = process.env["REACT_APP_TRANSLATIONSTUDIO_API_URL"] ?? "";
-const SECRET_HASH_AUTH = process.env["SECRET_HASH_AUTH"] ?? "";
-const JWT_AUTHENTICATION_DURATION_MIN = parseInt(process.env["JWT_AUTHENTICATION_DURATION"] ?? "15");
-
-if (URL === "" || SECRET_HASH_AUTH === "")
-    throw new Error("NOT SETUP");
-
 const TranslationstudioConfiguration = {
-    URL: URL,
-    SECRET: SECRET_HASH_AUTH,
-    DURATION: JWT_AUTHENTICATION_DURATION_MIN
+    URL: "https://contentful.translationstudio.tech",
 }
 
 export default TranslationstudioConfiguration

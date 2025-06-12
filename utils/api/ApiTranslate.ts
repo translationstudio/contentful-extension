@@ -26,7 +26,7 @@ export async function ApiTranslate(key:string, space:string, payload: Translatio
 		if (space !== payload.spaceid)
 			throw new Error("Invalid space");
 		
-		const res = await fetch(TranslationstudioConfiguration.URL + "/translate", {
+		const res = await fetch(TranslationstudioConfiguration.URL + "/translationstudio/translate", {
 			method: "POST",
 			cache: "no-cache",
 			headers:{
