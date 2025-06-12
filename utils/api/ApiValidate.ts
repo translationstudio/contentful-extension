@@ -17,24 +17,6 @@ along with this program; if not, see https://www.gnu.org/licenses/old-licenses/g
 */
 import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export const dynamic = "force-dynamic";
-
-async function isValidLicense(key:string)
-{
-    const respose = await fetch(TranslationstudioConfiguration.URL + "/validate", {
-        method: "POST",
-        cache: "no-cache",
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            license: key
-        })
-    });
-
-    return respose.ok;
-}
-
 export async function ApiValidate(license: string)
 {
     if (!license)
@@ -44,7 +26,8 @@ export async function ApiValidate(license: string)
         method: "POST",
         cache: "no-cache",
         headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-translationstudio': 'translationstudio'
         },
         body: JSON.stringify({
             license: license

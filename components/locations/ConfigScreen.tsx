@@ -20,9 +20,9 @@ import { ConfigAppSDK } from "@contentful/app-sdk";
 import { Heading, Form, Button, Flex, Caption, SectionHeading, TextLink, Textarea } from "@contentful/f36-components";
 import { css } from "emotion";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { validateLicense } from "../../utils/translationstudio";
 import { LOGO } from "../../utils/logo";
 import Image from "next/image";
+import { ApiValidate } from "utils/api/ApiValidate";
 
 export interface AppInstallationParameters {
 	translationStudioKey?: string;
@@ -75,7 +75,7 @@ const ConfigScreen = () =>
 
 		try 
 		{
-			const status = await validateLicense(key);
+			const status = await ApiValidate(key);
 			setValidKey(status);
 			return status;
 		} 

@@ -15,44 +15,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import { getAlreadyValidatedSessionCookieData } from "utils/AuthUtils";
+import { LanguageMapping } from "interfaces/translationstudio";
 import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export const dynamic = "force-dynamic";
-
-export async function GET()
+export async function ApiLanguageMappings(key:string, space:string)
 {
-    const cookieStore = await cookies();
-    const data = await getAlreadyValidatedSessionCookieData(cookieStore);
-    if (data === null || !data.token)
-    {
-        return NextResponse.json({ message: "Access impossible" }, {
-            status: 401
-        });
-    }
-
     const res = await fetch(TranslationstudioConfiguration.URL + "/mappings", {
-		method: "GET",
+		method: "POST",
         cache: "no-cache",
 		headers:{
 			'Content-Type': 'application/json',
-            'Authorization': data.token
-		}
+            'X-translationstudio': 'translationstudio'
+		},
+        body: JSON.stringify({	
+			license: key,
+            space: space
+		})
 	});
 
-    if (res.ok)
-    {
-        const js = await res.json();
-        return NextResponse.json(js);
-    }
-
-    const response = NextResponse.json({ message: "Could not fetch data" }, {
-        status: res.status
-    });
-    if (response.cookies.has("tssession"))
-        response.cookies.delete("tssession");
-
-    return response;
+    if (!res.ok)
+        throw new Error("Could not fetch data");
+    
+    const js:LanguageMapping[] = await res.json();
+    return js;
 }
