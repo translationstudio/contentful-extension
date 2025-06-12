@@ -17,8 +17,6 @@ along with this program; if not, see https://www.gnu.org/licenses/old-licenses/g
 */
 import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
-export const dynamic = "force-dynamic";
-
 export type TranslationHistory = {
     "element-uid": string;
     "element-name": string;
