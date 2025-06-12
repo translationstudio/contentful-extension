@@ -25,8 +25,7 @@ const isSecuredRoute = function (uri: string) {
 }
 
 const isSessionRoute = function (uri: string) {
-    return !uri.startsWith("/api/validate")
-        && !uri.startsWith("/api/authenticate");
+    return !uri.startsWith("/api/authenticate");
 }
 
 const verifyApiRoutePreconditions = async function()

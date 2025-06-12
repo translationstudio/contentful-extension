@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 import { LanguageMapping, TranslationRequest } from "../interfaces/translationstudio";
+import TranslationstudioConfiguration from "utils/TranslationstudioConfiguration";
 
 export const postAuthenticate = (key: string, space:string): Promise<Response> => {
 
@@ -34,19 +35,25 @@ export const postAuthenticate = (key: string, space:string): Promise<Response> =
 };
 
 
-export const validateLicense = (key: string): Promise<Response> => {
+export const validateLicense = async (license: string): Promise<boolean> => {
 
-	return fetch("/api/validate", {
-		method: "POST",
-		cache: "no-cache",
-		headers:{
-			'Content-Type': 'application/json',
+	if (!license)
+        throw new Error("License missing");
+
+    const respose = await fetch(TranslationstudioConfiguration.URL + "/validate", {
+        method: "POST",
+        cache: "no-cache",
+        headers:{
+            'Content-Type': 'application/json',
 			'X-translationstudio': 'translationstudio'
-		},
-		body: JSON.stringify({
-			license: key
-		})
-	});
+        },
+        body: JSON.stringify({
+            license: license
+        })
+    });
+
+    return respose.ok;
+
 };
 
 

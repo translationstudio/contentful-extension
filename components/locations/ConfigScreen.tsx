@@ -75,8 +75,7 @@ const ConfigScreen = () =>
 
 		try 
 		{
-			const response = await validateLicense(key);
-			const status = response.status === 204;
+			const status = await validateLicense(key);
 			setValidKey(status);
 			return status;
 		} 
