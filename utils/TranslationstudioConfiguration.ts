@@ -15,8 +15,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
+const requireUrl = function()
+{
+    const val = process.env["NEXT_PUBLIC_MIDDLEWARE_URL"];
+    if (val && val !== "")
+        return val;
+
+    return "https://contentful.translationstudio.tech"
+}
+
+
 const TranslationstudioConfiguration = {
-    URL: "https://contentful.translationstudio.tech",
+    URL: requireUrl()
 }
 
 export default TranslationstudioConfiguration
